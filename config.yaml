@@ -1,10 +1,10 @@
 data :
   name: MVTec  #MVTec #MTD #VisA 
   data_dir: datasets/MVTec  #MVTec #VisA #MTD  
-  category: screw  #['carpet', 'bottle', 'hazelnut', 'leather', 'cable', 'capsule', 'grid', 'pill', 'transistor', 'metal_nut', 'screw','toothbrush', 'zipper', 'tile', 'wood']    
+  category: capsule  #['carpet', 'bottle', 'hazelnut', 'leather', 'cable', 'capsule', 'grid', 'pill', 'transistor', 'metal_nut', 'screw','toothbrush', 'zipper', 'tile', 'wood']    
                    # ['candle', 'capsules', 'cashew', 'chewinggum', 'fryum', 'macaroni1', 'macaroni2', 'pcb1', 'pcb2' ,'pcb3', 'pcb4', 'pipe_fryum']
   image_size: 256 
-  batch_size: 32 # 32 for DDAD and 16 for DDADS
+  batch_size: 8 # 32 for DDAD and 16 for DDADS
   DA_batch_size: 16 #16 for MVTec and [macaroni2, pcb1] in VisA, and 32 for other categories in VisA
   test_batch_size: 16 #16 for MVTec, 32 for VisA
   mask : True 
