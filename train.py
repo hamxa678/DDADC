@@ -46,8 +46,8 @@ def trainer(model, category, config):
             loss = get_loss(model, batch[0], t, config) 
             loss.backward()
             optimizer.step()
-            if (epoch+1) % 25 == 0 and step == 0:
-                print(f"Epoch {epoch+1} | Loss: {loss.item()}")
+            # if (epoch+1) % 25 == 0 and step == 0:
+            print(f"Epoch {epoch+1}/{config.model.epochs} | Step {step} | Loss: {loss.item()}")
             if (epoch+1) %250 == 0 and epoch>0 and step ==0:
                 if config.model.save_model:
                     model_save_dir = os.path.join(os.getcwd(), config.model.checkpoint_dir, category)
