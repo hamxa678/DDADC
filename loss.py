@@ -37,8 +37,6 @@ def get_loss(model, x_0, t, config):
     # Replace Gaussian noise with Simplex noise
     e = generate_simplex_noise(x_0.shape).to(x_0.device)
 
-    print("e shape", e.shape)
-    print("x_0 shape", x_0.shape)
     # e = (e - e.mean()) / e.std()
 
     # Apply forward diffusion process
