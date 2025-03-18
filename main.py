@@ -11,9 +11,10 @@ os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2"
 
 def build_model(config):
     if config.model.DDADS:
-        unet = UNetModel(config.data.image_size, 32, dropout=0.3, n_heads=2 ,in_channels=config.data.input_channel)
+        unet = UNetModel(config.data.image_size, base_channels=128,dropout=0, n_heads=2 ,in_channels=1)
     else:
-        unet = UNetModel(config.data.image_size, 64, dropout=0.0, n_heads=4 ,in_channels=config.data.input_channel)
+        unet = UNetModel(config.data.image_size, base_channels=128,dropout=0, n_heads=2 ,in_channels=1)
+
     return unet
 
 def train(config):
@@ -31,7 +32,7 @@ def train(config):
 
 def detection(config):
     unet = build_model(config)
-    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, config.data.category, str(config.model.load_chp)))
+    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, config.data.category, "2000.pt"))
     unet = torch.nn.DataParallel(unet)
     unet.load_state_dict(checkpoint)    
     unet.to(config.model.device)
@@ -43,9 +44,16 @@ def detection(config):
 
 def finetuning(config):
     unet = build_model(config)
-    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, config.data.category, str(config.model.load_chp)))
+    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, "2000.pt"))
     unet = torch.nn.DataParallel(unet)
-    unet.load_state_dict(checkpoint)    
+        
+    if "unet" in checkpoint:
+        new_state_dict = {f"module.{k}": v for k, v in checkpoint["unet"].items()}
+        unet.load_state_dict(new_state_dict, strict=False)
+    else:
+        new_state_dict = {f"module.{k}": v for k, v in checkpoint["ema"].items()}
+        unet.load_state_dict(new_state_dict, strict=False)
+    # unet.load_state_dict(checkpoint)    
     unet.to(config.model.device)
     unet.eval()
     domain_adaptation(unet, config, fine_tune=True)

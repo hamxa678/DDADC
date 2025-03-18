@@ -73,13 +73,16 @@ def domain_adaptation(unet, config, fine_tune):
                 ])
 
         optimizer = torch.optim.AdamW(feature_extractor.parameters(),lr= 1e-4)
-        torch.save(frozen_feature_extractor.state_dict(), os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir), config.data.category,f'feat0'))
+        torch.save(frozen_feature_extractor.state_dict(), os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir),f'feat0'))
         reconstruction = Reconstruction(unet, config)
         for epoch in range(config.model.DA_epochs):
             for step, batch in enumerate(trainloader):
                 half_batch_size = batch[0].shape[0]//2
                 target = batch[0][:half_batch_size].to(config.model.device)  
-                input = batch[0][half_batch_size:].to(config.model.device)   
+                input = batch[0][half_batch_size:].to(config.model.device) 
+
+                print(f'input shape: {input.shape}')
+                print(f'target shape: {target.shape}')  
                 
                 x0 = reconstruction(input, target, config.model.w_DA)[-1].to(config.model.device)
                 x0 = transform(x0)

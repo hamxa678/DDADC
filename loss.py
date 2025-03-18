@@ -1,25 +1,67 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from noise import snoise3
+from simplex import Simplex_CLASS
 
-def generate_simplex_noise(shape, scale=10.0):
-    """Generate Simplex noise with given shape."""
-    B, C, H, W = shape
-    simplex_noise = torch.zeros(shape, device="cuda")  # Assuming GPU usage
-
-    for b in range(B):
-        for h in range(H):
-            for w in range(W):
-                simplex_noise[b, 0, h, w] = snoise3(h / scale, w / scale, b / scale)
-
-    # Normalize to match Gaussian distribution properties
-    simplex_noise = (simplex_noise - simplex_noise.mean()) / simplex_noise.std()
-    
-    return simplex_noise
+def generate_simplex_noise(
+        Simplex_instance, x, t, random_param=False, octave=6, persistence=0.8, frequency=64,
+        in_channels=1
+        ):
+    # x.shape :: torch.Size([1, 1200, 1600])
+    # t: tensor([747])
+    noise = torch.empty(x.shape).to(x.device)
+    # noise.shape :: noise shape:: torch.Size([1, 1200, 1600])
+    for i in range(in_channels):
+        Simplex_instance.newSeed()
+        if random_param:
+            param = random.choice(
+                    [(2, 0.6, 16), (6, 0.6, 32), (7, 0.7, 32), (10, 0.8, 64), (5, 0.8, 16), (4, 0.6, 16), (1, 0.6, 64),
+                     (7, 0.8, 128), (6, 0.9, 64), (2, 0.85, 128), (2, 0.85, 64), (2, 0.85, 32), (2, 0.85, 16),
+                     (2, 0.85, 8),
+                     (2, 0.85, 4), (2, 0.85, 2), (1, 0.85, 128), (1, 0.85, 64), (1, 0.85, 32), (1, 0.85, 16),
+                     (1, 0.85, 8),
+                     (1, 0.85, 4), (1, 0.85, 2), ]
+                    )
+            # 2D octaves seem to introduce directional artifacts in the top left
+            noise[:, i, ...] = torch.unsqueeze(
+                    torch.from_numpy(
+                            # Simplex_instance.rand_2d_octaves(
+                            #         x.shape[-2:], param[0], param[1],
+                            #         param[2]
+                            #         )
+                            Simplex_instance.rand_3d_fixed_T_octaves(
+                                    x.shape[-2:], t.detach().cpu().numpy(), param[0], param[1],
+                                    param[2]
+                                    )
+                            ).to(x.device), 0
+                    ).repeat(x.shape[0], 1, 1, 1)
+        
+        # lst = torch.from_numpy(
+        #     Simplex_instance.rand_3d_fixed_T_octaves(
+        #         x.shape[-2:], t.detach().cpu().numpy(), octave, persistence, frequency
+        #     )).to(x.device).squeeze(0).shape
+        # print(lst)
+        noise = torch.unsqueeze(noise,0)
+        # print(f'unsqueezed noise :: {noise.shape}')
+        noise = torch.unsqueeze(
+            # Simplex3d :: torch.Size([1, 1200, 1600])
+                torch.from_numpy(
+                        # Simplex_instance.rand_2d_octaves(
+                        #         x.shape[-2:], octave,
+                        #         persistence, frequency
+                        #         )
+                        Simplex_instance.rand_3d_fixed_T_octaves(
+                                x.shape[-2:], t.detach().cpu().numpy(), octave,
+                                persistence, frequency
+                                )
+                        ).to(x.device), 0
+                ).repeat(x.shape[0], 1, 1, 1)
+    # print(f"Ulambaaaa :: {noise.shape}")    
+    return noise
 
 def get_loss(model, x_0, t, config):
     # print("Loss ftnnnnnnn")
+    simplex_instance = Simplex_CLASS()
     x_0 = x_0.to(config.model.device)
     
     betas = torch.linspace(
@@ -35,7 +77,7 @@ def get_loss(model, x_0, t, config):
     at = alpha_bar.index_select(0, t).view(-1, 1, 1, 1)
 
     # Replace Gaussian noise with Simplex noise
-    e = generate_simplex_noise(x_0.shape).to(x_0.device)
+    e = generate_simplex_noise(Simplex_instance=simplex_instance, x=x_0, t=t).float()
 
     # e = (e - e.mean()) / e.std()
 
