@@ -44,11 +44,12 @@ class Dataset_maker(torch.utils.data.Dataset):
         image_file = self.image_files[index]
         image = Image.open(image_file)
         # image = self.image_transform(image)
+        image = self.image_transform(image)
+        print(f'DATASET CLASS :: Image shape: {image.shape}')
         if(image.shape[0] == 1):
             image = image.expand(3, self.config.data.image_size, self.config.data.image_size)
         if self.is_train:
             label = 'good'
-            image = self.image_transform(image)
 
             return image, label
         else:
@@ -67,7 +68,7 @@ class Dataset_maker(torch.utils.data.Dataset):
                 else :
                     target = torch.zeros([1, image.shape[-2], image.shape[-1]])
                     label = 'defective'
-            image = self.image_transform(image)
+            
             return image, target, label
 
     def __len__(self):
