@@ -46,11 +46,10 @@ class Dataset_maker(torch.utils.data.Dataset):
         # image = self.image_transform(image)
         image = self.image_transform(image)
         
-        if(image.shape[0] == 1):
-            image = image.expand(3, self.config.data.image_size, self.config.data.image_size)
+        # if(image.shape[0] == 1):
+        #     image = image.expand(3, self.config.data.image_size, self.config.data.image_size)
         if self.is_train:
             label = 'good'
-            print(f'DATASET CLASS :: Image shape: {image.shape}')
             return image, label
         else:
             if self.config.data.mask:
