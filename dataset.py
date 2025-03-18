@@ -43,7 +43,7 @@ class Dataset_maker(torch.utils.data.Dataset):
     def __getitem__(self, index):
         image_file = self.image_files[index]
         image = Image.open(image_file)
-        image = self.image_transform(image)
+        # image = self.image_transform(image)
         if(image.shape[0] == 1):
             image = image.expand(3, self.config.data.image_size, self.config.data.image_size)
         if self.is_train:
