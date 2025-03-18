@@ -26,14 +26,6 @@ def trainer(model, category, config):
     )
     trainloader = torch.utils.data.DataLoader(
         train_dataset,
-        transforms.Compose(
-            [
-                transforms.Grayscale(num_output_channels=1),
-                transforms.Resize((config.data.image_size, config.data.image_size)),
-                transforms.ToTensor(),
-                transforms.Lambda(lambda t: (t * 2) - 1),
-            ]
-        ),
         batch_size=config.data.batch_size,
         shuffle=True,
         num_workers=config.model.num_workers,
