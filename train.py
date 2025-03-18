@@ -26,7 +26,7 @@ def trainer(model, category, config):
     )
     trainloader = torch.utils.data.DataLoader(
         train_dataset,
-        transforms = transforms.Compose(
+        transforms.Compose(
             [
                 transforms.Grayscale(num_output_channels=1),
                 transforms.Resize((config.data.image_size, config.data.image_size)),
