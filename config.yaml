@@ -3,7 +3,7 @@ data :
   data_dir: /content/DDADC/BOSCHv2.0/Clean data  #MVTec #VisA #MTD  
   category: False  
   image_size: 256 
-  batch_size: 8 # 32 for DDAD and 16 for DDADS
+  batch_size: 1 # 32 for DDAD and 16 for DDADS
   DA_batch_size: 16 #16 for MVTec and [macaroni2, pcb1] in VisA, and 32 for other categories in VisA
   test_batch_size: 16 #16 for MVTec, 32 for VisA
   mask : True 
