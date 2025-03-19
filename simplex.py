@@ -87,6 +87,7 @@ class Simplex_CLASS:
             noise3 = self.noise3array(x / frequency, y / frequency, T / frequency)
             noise3 = np.repeat(noise3, 16, axis=0) 
             print(f"shapes: noise3 {noise3.shape} noise {noise.shape}")
+            print(noise.shape, amplitude.shape, noise3.shape)
             noise += amplitude * noise3
             frequency /= 2
             amplitude *= persistence
