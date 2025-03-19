@@ -44,19 +44,33 @@ def generate_simplex_noise(
         # print(f'noise shape level one :: {noise.shape}')
         # print(f'unsqueezed noise :: {noise.shape}')
         # print(Simplex_instance.rand_3d_fixed_T_octaves(x.shape[-2:], t.detach().cpu().numpy(), octave,persistence, frequency).shape)
-        noise = torch.unsqueeze(
-            # Simplex3d :: torch.Size([1, 1200, 1600])
-                torch.from_numpy(
-                        # Simplex_instance.rand_2d_octaves(
-                        #         x.shape[-2:], octave,
-                        #         persistence, frequency
-                        #         )
-                        Simplex_instance.rand_3d_fixed_T_octaves(
-                                x.shape[-2:], t.detach().cpu().numpy(), octave,
-                                persistence, frequency
-                                )
-                        ).to(x.device), 0
-                ).repeat(x.shape[0], 1, 1, 1)
+
+
+        #unchanged
+        # noise = torch.unsqueeze(
+        #     # Simplex3d :: torch.Size([1, 1200, 1600])
+        #         torch.from_numpy(
+        #                 # Simplex_instance.rand_2d_octaves(
+        #                 #         x.shape[-2:], octave,
+        #                 #         persistence, frequency
+        #                 #         )
+        #                 Simplex_instance.rand_3d_fixed_T_octaves(
+        #                         x.shape[-2:], t.detach().cpu().numpy(), octave,
+        #                         persistence, frequency
+        #                         )
+        #                 ).to(x.device), 0
+        #         ).repeat(x.shape[0], 1, 1, 1)
+        
+        noise = torch.from_numpy(
+                # Simplex_instance.rand_2d_octaves(
+                #         x.shape[-2:], octave,
+                #         persistence, frequency
+                #         )
+                Simplex_instance.rand_3d_fixed_T_octaves(
+                        x.shape[-2:], t.detach().cpu().numpy(), octave,
+                        persistence, frequency
+                        )
+                        ).to(x.device)
         print(f'noise shape level two :: {noise.shape}')
     # print(f"Ulambaaaa :: {noise.shape}")    
     return noise
