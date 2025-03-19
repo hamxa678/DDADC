@@ -44,6 +44,9 @@ def trainer(model, category, config):
             # loss = 0
             # for _ in range(2):
             t = torch.randint(0, config.model.trajectory_steps, (batch[0].shape[0],), device=config.model.device).long()
+            print(f'Batch :: {batch[0].shape}')
+            print(f"t shape :: {t.shape}")
+            print(f"t :: {t}")
             loss = get_loss(model, batch[0], t, config) 
             loss.backward()
             optimizer.step()
