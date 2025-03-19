@@ -90,7 +90,7 @@ class Simplex_CLASS:
             frequency /= 2
             amplitude *= persistence
 
-        # print(f'rand_3d :: noise {noise.shape}')
+        print(f'rand_3d :: noise {noise.shape}')
         
         
         return noise
