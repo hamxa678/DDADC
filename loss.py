@@ -80,6 +80,8 @@ def get_loss(model, x_0, t, config):
     e = generate_simplex_noise(Simplex_instance=simplex_instance, x=x_0, t=t).float()
 
     # e = (e - e.mean()) / e.std()
+    print(f'e shape :: {e.shape}')    
+
 
     # Apply forward diffusion process
     x_t = at.sqrt() * x_0 + (1 - at).sqrt() * e 
