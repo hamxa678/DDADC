@@ -64,6 +64,7 @@ def get_loss(model, x_0, t, config):
     simplex_instance = Simplex_CLASS()
     x_0 = x_0.to(config.model.device)
     
+    print(f'x_0 shape :: {x_0.shape}')
     betas = torch.linspace(
         config.model.beta_start, 
         config.model.beta_end, 
