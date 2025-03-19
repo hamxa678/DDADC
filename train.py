@@ -39,6 +39,7 @@ def trainer(model, category, config):
 
     for epoch in range(config.model.epochs):
         for step, batch in enumerate(trainloader):
+            print(f"images shape :: {batch[0].shape}, labels :: {batch[1]}")
             optimizer.zero_grad()
             # loss = 0
             # for _ in range(2):
