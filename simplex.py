@@ -81,7 +81,7 @@ class Simplex_CLASS:
         """
         assert len(shape) == 2
         # noise = np.zeros((1, *shape))
-        noise = np.zeros((shape))
+        noise = np.zeros((16, *shape))
 
         y, x = [np.arange(0, end) for end in shape]
         amplitude = 1
