@@ -84,6 +84,7 @@ def get_loss(model, x_0, t, config):
     # Apply forward diffusion process
     x_t = at.sqrt() * x_0 + (1 - at).sqrt() * e 
 
+    print(f'x_t shape :: {x_t.shape}')    
     # Predict noise using the model
     output = model(x_t, t.float())
     loss = (e - output).square().mean(dim=(1, 2, 3)).mean(dim=0)
