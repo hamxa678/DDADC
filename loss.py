@@ -42,6 +42,7 @@ def generate_simplex_noise(
         #     )).to(x.device).squeeze(0).shape
         # print(lst)
         noise = torch.unsqueeze(noise,0)
+        print(f'noise shape level one :: {noise.shape}')
         # print(f'unsqueezed noise :: {noise.shape}')
         noise = torch.unsqueeze(
             # Simplex3d :: torch.Size([1, 1200, 1600])
