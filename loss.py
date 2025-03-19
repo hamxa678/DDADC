@@ -7,8 +7,7 @@ def generate_simplex_noise(
         Simplex_instance, x, t, random_param=False, octave=6, persistence=0.8, frequency=64,
         in_channels=1
         ):
-    # x.shape :: torch.Size([1, 1200, 1600])
-    # t: tensor([747])
+
     noise = torch.empty(x.shape).to(x.device)
     # noise.shape :: noise shape:: torch.Size([1, 1200, 1600])
     for i in range(in_channels):
@@ -45,7 +44,7 @@ def generate_simplex_noise(
         # print(f'noise shape level one :: {noise.shape}')
         # print(f'unsqueezed noise :: {noise.shape}')
         # print(Simplex_instance.rand_3d_fixed_T_octaves(x.shape[-2:], t.detach().cpu().numpy(), octave,persistence, frequency).shape)
-        noise[:, i, ...] = torch.unsqueeze(
+        noise = torch.unsqueeze(
             # Simplex3d :: torch.Size([1, 1200, 1600])
                 torch.from_numpy(
                         # Simplex_instance.rand_2d_octaves(
@@ -58,7 +57,7 @@ def generate_simplex_noise(
                                 )
                         ).to(x.device), 0
                 ).repeat(x.shape[0], 1, 1, 1)
-        
+        print(f'noise shape level two :: {noise.shape}')
     # print(f"Ulambaaaa :: {noise.shape}")    
     return noise
 
