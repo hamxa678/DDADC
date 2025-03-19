@@ -38,8 +38,8 @@ def trainer(model, category, config):
 
 
     for epoch in range(config.model.epochs):
+        losses = []
         for step, batch in enumerate(trainloader):
-            print(f"images shape :: {batch[0].shape}, labels :: {batch[1]}")
             optimizer.zero_grad()
             # loss = 0
             # for _ in range(2):
@@ -48,11 +48,13 @@ def trainer(model, category, config):
             loss.backward()
             optimizer.step()
             # if (epoch+1) % 25 == 0 and step == 0:
-            print(f"Epoch {epoch+1}/{config.model.epochs} | Step {step} | Loss: {loss.item()}")
+            print(f"Epoch {epoch+1} | Step {step} | Loss: {loss.item()}")
+            losses.append(loss.item())
             if (epoch+1) %250 == 0 and epoch>0 and step ==0:
                 if config.model.save_model:
                     model_save_dir = os.path.join(os.getcwd(), config.model.checkpoint_dir, category)
                     if not os.path.exists(model_save_dir):
                         os.mkdir(model_save_dir)
                     torch.save(model.state_dict(), os.path.join(model_save_dir, str(epoch+1)))
+        print(f"Epoch {epoch+1}/{config.model.epochs} | Average Loss: {sum(losses)/len(losses)}")
                 

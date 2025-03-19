@@ -68,7 +68,6 @@ def get_loss(model, x_0, t, config):
     simplex_instance = Simplex_CLASS()
     x_0 = x_0.to(config.model.device)
     
-    print(f'x_0 shape :: {x_0.shape}')
     betas = torch.linspace(
         config.model.beta_start, 
         config.model.beta_end, 
@@ -85,17 +84,14 @@ def get_loss(model, x_0, t, config):
     e = generate_simplex_noise(Simplex_instance=simplex_instance, x=x_0, t=t).float()
 
     # e = (e - e.mean()) / e.std()
-    print(f'e shape :: {e.shape}')    
 
 
     # Apply forward diffusion process
     x_t = at.sqrt() * x_0 + (1 - at).sqrt() * e 
-
-    print(f'x_t shape :: {x_t.shape}')    
+ 
     # Predict noise using the model
     output = model(x_t, t.float())
     loss = (e - output).square().mean(dim=(1, 2, 3)).mean(dim=0)
-    print(f'Loss: {loss}')
     # Compute denoising loss (Normalized MSE)
     return loss
 
