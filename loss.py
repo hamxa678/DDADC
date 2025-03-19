@@ -58,7 +58,6 @@ def generate_simplex_noise(
                                 )
                         ).to(x.device), 0
                 ).repeat(x.shape[0], 1, 1, 1)
-        print(f'noise shape level two :: {noise.shape}')
         
     # print(f"Ulambaaaa :: {noise.shape}")    
     return noise
