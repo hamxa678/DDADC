@@ -93,7 +93,7 @@ from torchvision.datasets import CIFAR10
 class Dataset_maker(torch.utils.data.Dataset):
     def __init__(self, root, category, config, is_train=True):
         self.image_transform = transforms.Compose(
-            [
+            [   transforms.Grayscale(num_output_channels=1),
                 transforms.Resize((config.data.image_size, config.data.image_size)),  
                 transforms.ToTensor(), # Scales data into [0,1] 
                 transforms.Lambda(lambda t: (t * 2) - 1) # Scale between [-1, 1] 
@@ -101,7 +101,7 @@ class Dataset_maker(torch.utils.data.Dataset):
         )
         self.config = config
         self.mask_transform = transforms.Compose(
-            [
+            [   transforms.Grayscale(num_output_channels=1),
                 transforms.Resize((config.data.image_size, config.data.image_size)),
                 transforms.ToTensor(), # Scales data into [0,1] 
             ]
