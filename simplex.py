@@ -79,17 +79,16 @@ class Simplex_CLASS:
         :param frequency: Frequency of initial octave of noise
         :return: Fractal noise sample with n lots of 2D images
         """
-        print(f't : {type(T)}')
-        print(f'T :: {type([T[0]])}')
-        print(f'Notice :: shape :: {shape} T :: {T[0]}')
+
         assert len(shape) == 2
         # noise = np.zeros((1, *shape))
         noise = np.zeros((1, *shape))
 
         y, x = [np.arange(0, end) for end in shape]
         amplitude = 1
+        
         for _ in range(octaves):
-            noise += amplitude * self.noise3array(x / frequency, y / frequency, [T[0]] / frequency)
+            noise += amplitude * self.noise3array(x / frequency, y / frequency, np.array([T[0]])/ frequency)
             frequency /= 2
             amplitude *= persistence
 
