@@ -80,7 +80,7 @@ class Simplex_CLASS:
         :return: Fractal noise sample with n lots of 2D images
         """
 
-        print(f'Notice :: shape :: {shape} T :: {T}')
+        print(f'Notice :: shape :: {shape} T :: {T.shape}')
         assert len(shape) == 2
         # noise = np.zeros((1, *shape))
         noise = np.zeros((1, *shape))
