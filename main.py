@@ -50,7 +50,7 @@ def detection(config):
 
 def finetuning(config):
     unet = build_model(config)
-    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, "2000.pt"))
+    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, "3000.pt"))
     unet = torch.nn.DataParallel(unet)
     if "unet" in checkpoint:
         new_state_dict = {f"module.{k}": v for k, v in checkpoint["unet"].items()}
