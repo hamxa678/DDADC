@@ -86,7 +86,7 @@ class Simplex_CLASS:
         y, x = [np.arange(0, end) for end in shape]
         amplitude = 1
         for _ in range(octaves):
-            noise += amplitude * self.noise3array(x / frequency, y / frequency, T / frequency)
+            noise += amplitude * self.noise3array(x / frequency, y / frequency, T[0] / frequency)
             frequency /= 2
             amplitude *= persistence
 
