@@ -83,7 +83,6 @@ def domain_adaptation(unet, config, fine_tune):
                 target = batch[0][:half_batch_size].to(config.model.device)  
                 input = batch[0][half_batch_size:].to(config.model.device) 
                 
-            
                 x0 = reconstruction(input, target, config.model.w_DA)[-1].to(config.model.device)
 
                 x0 = x0.repeat(1, 3, 1, 1)
@@ -97,8 +96,6 @@ def domain_adaptation(unet, config, fine_tune):
 
                 target_frozen_fe = frozen_feature_extractor(target)
                 reconst_frozen_fe = frozen_feature_extractor(x0)
-                
-                
 
                 loss = loss_fucntion(reconst_fe, target_fe, target_frozen_fe,reconst_frozen_fe, config)
                 print(f"Loss: {loss.item()}")
