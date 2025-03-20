@@ -54,12 +54,14 @@ class Dataset_maker(torch.utils.data.Dataset):
         else:
             if self.config.data.mask:
                 if self.config.data.name == 'Bosch':
-                        print(image_file, image)
-                        target = Image.open(
-                            image_file.replace(
-                                ".jpg", ".png"
-                            )
+                        mask_file = image_file.replace(
+                            ".jpg", ".png"
                         )
+                        
+                        target = Image.open(
+                            mask_file
+                        )
+                        print(image_file, mask_file)
                 label = 'defective'
             else:
                 if os.path.dirname(image_file).endswith("good"):
