@@ -56,7 +56,7 @@ class Dataset_maker(torch.utils.data.Dataset):
                 if self.config.data.name == 'Bosch':
                         print(image_file, image)
                         target = Image.open(
-                            image.replace(
+                            image_file.replace(
                                 ".jpg", ".png"
                             )
                         )
