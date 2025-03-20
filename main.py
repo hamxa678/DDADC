@@ -32,7 +32,7 @@ def train(config):
 
 def detection(config):
     unet = build_model(config)
-    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, "3000.pt"))
+    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, "3000.pt"), weights_only=False)
     unet = torch.nn.DataParallel(unet)
     if "unet" in checkpoint:
         new_state_dict = {f"module.{k}": v for k, v in checkpoint["unet"].items()}
