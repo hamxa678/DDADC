@@ -1,6 +1,6 @@
 data :
   name: Bosch  #MVTec #MTD #VisA 
-  data_dir: /content/DDADC/BOSCHv2.0/Clean data  #MVTec #VisA #MTD  
+  data_dir: /content/DDADC/BOSCHv2.0  #MVTec #VisA #MTD  
   # name: bosch 
   # data_dir: /content/DDADC/BOSCHv2.0/Clean data  #MVTec #VisA #MTD  
   category: capsule  

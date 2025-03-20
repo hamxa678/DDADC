@@ -34,10 +34,10 @@ class Dataset_maker(torch.utils.data.Dataset):
         )
         if is_train:
             self.image_files = glob(
-                os.path.join(root, "train", "*.jpg")
+                os.path.join(root,"Clean data", "train", "*.jpg")
             )
         else:
-            self.image_files = glob(os.path.join(root, "test","*.jpg"))
+            self.image_files = glob(os.path.join(root, "Anomolous data","*.jpg"))
         self.is_train = is_train
 
     def __getitem__(self, index):
@@ -53,10 +53,10 @@ class Dataset_maker(torch.utils.data.Dataset):
             return image, label
         else:
             if self.config.data.mask:
-                if self.config.data.name == 'BOSCH':
+                if self.config.data.name == 'Bosch':
                         target = Image.open(
-                            image_file.replace("/test/", "/ground_truth/").replace(
-                                ".png", "_mask.png"
+                            image_file.replace(
+                                ".jpg", ".png"
                             )
                         )
                 label = 'defective'
