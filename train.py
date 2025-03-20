@@ -40,6 +40,8 @@ def trainer(model, category, config):
     for epoch in range(config.model.epochs):
         losses = []
         for step, batch in enumerate(trainloader):
+            if step == 200:
+                break
             optimizer.zero_grad()
             # loss = 0
             # for _ in range(2):
