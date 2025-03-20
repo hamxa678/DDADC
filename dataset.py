@@ -61,7 +61,6 @@ class Dataset_maker(torch.utils.data.Dataset):
                         target = Image.open(
                             mask_file
                         )
-                        print(image_file, mask_file)
                 label = 'defective'
             else:
                 if os.path.dirname(image_file).endswith("good"):
