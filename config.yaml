@@ -48,4 +48,4 @@ metrics:
   auroc: True
   pro: True
   misclassifications: False
-  visualisation: False
+  visualisation: True
