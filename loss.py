@@ -93,9 +93,9 @@ def get_loss(model, x_0, t, config):
     at = alpha_bar.index_select(0, t).view(-1, 1, 1, 1)
 
     # Replace Gaussian noise with Simplex noise
-#     e = generate_simplex_noise(Simplex_instance=simplex_instance, x=x_0, t=t).float()
-    e = torch.randn_like(x_0, device = x_0.device)
-    print(f"printing shape e model {e.shape}")
+    e = generate_simplex_noise(Simplex_instance=simplex_instance, x=x_0, t=t).float()
+    # e = torch.randn_like(x_0, device = x_0.device)
+    # print(f"printing shape e model {e.shape}")
 
     # e = (e - e.mean()) / e.std()
 

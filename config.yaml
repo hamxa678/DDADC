@@ -1,7 +1,6 @@
 data :
-  name: MVTec  
-  data_dir: datasets/MVTec
-  # /content/DDADC/BOSCHv2.0/Clean data  #MVTec #VisA #MTD  
+  name: bosch 
+  data_dir: /content/DDADC/BOSCHv2.0/Clean data  #MVTec #VisA #MTD  
   category: capsule  
   image_size: 256 
   batch_size: 8 # 32 for DDAD and 16 for DDADS
