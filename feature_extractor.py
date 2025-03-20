@@ -48,6 +48,7 @@ def domain_adaptation(unet, config, fine_tune):
     frozen_feature_extractor = torch.nn.DataParallel(frozen_feature_extractor)
 
 
+
     train_dataset = Dataset_maker(
         root= config.data.data_dir,
         category= config.data.category,
@@ -77,14 +78,17 @@ def domain_adaptation(unet, config, fine_tune):
         reconstruction = Reconstruction(unet, config)
         for epoch in range(config.model.DA_epochs):
             for step, batch in enumerate(trainloader):
+                print(f"Epoch {epoch+1} | Step {step}")
                 half_batch_size = batch[0].shape[0]//2
                 target = batch[0][:half_batch_size].to(config.model.device)  
                 input = batch[0][half_batch_size:].to(config.model.device) 
-
-                print(f'input shape: {input.shape}')
-                print(f'target shape: {target.shape}')  
                 
+            
                 x0 = reconstruction(input, target, config.model.w_DA)[-1].to(config.model.device)
+
+                x0 = x0.repeat(1, 3, 1, 1)
+                target = target.repeat(1, 3, 1, 1)
+
                 x0 = transform(x0)
                 target = transform(target)
 
@@ -97,14 +101,16 @@ def domain_adaptation(unet, config, fine_tune):
                 
 
                 loss = loss_fucntion(reconst_fe, target_fe, target_frozen_fe,reconst_frozen_fe, config)
+                print(f"Loss: {loss.item()}")
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
 
             print(f"Epoch {epoch+1} | Loss: {loss.item()}")
-            # if (epoch+1) % 5 == 0:
-            torch.save(feature_extractor.state_dict(), os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir), config.data.category,f'feat{epoch+1}'))
+            if (epoch+1) % 4 == 0:
+                print(f"Saving model at epoch {epoch+1}")
+                torch.save(feature_extractor.state_dict(), os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir),f'feat{epoch+1}'))
     else:
-        checkpoint = torch.load(os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir), config.data.category,f'feat{config.model.DA_chp}'))#{config.model.DA_chp}            
+        checkpoint = torch.load(os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir), f'feat{config.model.DA_chp}'))#{config.model.DA_chp}            
         feature_extractor.load_state_dict(checkpoint)  
     return feature_extractor

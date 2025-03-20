@@ -58,6 +58,8 @@ def feature_distance(output, target, FE, config):
             transforms.Lambda(lambda t: (t + 1) / (2)),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
+    output = output.repeat(1, 3, 1, 1)
+    target = target.repeat(1, 3, 1, 1)
     target = transform(target)
     output = transform(output)
     inputs_features = FE(target)

@@ -24,7 +24,7 @@ def train(config):
     print(" Num params: ", sum(p.numel() for p in unet.parameters()))
     unet = unet.to(config.model.device)
     unet.train()
-    unet = torch.nn.DataParallel(unet)
+    # unet = torch.nn.DataParallel(unet)
     # checkpoint = torch.load(os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir), config.data.category,'1000'))
     # unet.load_state_dict(checkpoint)  
     trainer(unet, config.data.category, config)#config.data.category, 
@@ -32,11 +32,17 @@ def train(config):
 
 def detection(config):
     unet = build_model(config)
-    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, config.data.category, "2000.pt"))
+    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, "2000.pt"))
     unet = torch.nn.DataParallel(unet)
-    unet.load_state_dict(checkpoint)    
+    if "unet" in checkpoint:
+        new_state_dict = {f"module.{k}": v for k, v in checkpoint["unet"].items()}
+        unet.load_state_dict(new_state_dict, strict=False)
+    else:
+        new_state_dict = {f"module.{k}": v for k, v in checkpoint["ema"].items()}
+        unet.load_state_dict(new_state_dict, strict=False)
+    # unet.load_state_dict(checkpoint)    
     unet.to(config.model.device)
-    checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, config.data.category, str(config.model.load_chp)))
+    # checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, str(config.model.load_chp)))
     unet.eval()
     ddad = DDAD(unet, config)
     ddad()
@@ -46,7 +52,6 @@ def finetuning(config):
     unet = build_model(config)
     checkpoint = torch.load(os.path.join(os.getcwd(), config.model.checkpoint_dir, "2000.pt"))
     unet = torch.nn.DataParallel(unet)
-        
     if "unet" in checkpoint:
         new_state_dict = {f"module.{k}": v for k, v in checkpoint["unet"].items()}
         unet.load_state_dict(new_state_dict, strict=False)
