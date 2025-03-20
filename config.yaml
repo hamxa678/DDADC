@@ -1,5 +1,5 @@
 data :
-  name: MVTec  #MVTec #MTD #VisA 
+  name: Bosch  #MVTec #MTD #VisA 
   data_dir: datasets/MVTec  #MVTec #VisA #MTD  
   # name: bosch 
   # data_dir: /content/DDADC/BOSCHv2.0/Clean data  #MVTec #VisA #MTD  
@@ -15,7 +15,7 @@ data :
 
 model:
   DDADS: False
-  checkpoint_dir: checkpoints/MVTec   #MTD  #MVTec  #VisA
+  checkpoint_dir: checkpoints/Bosch   #MTD  #MVTec  #VisA
   checkpoint_name: weights
   exp_name: default
   feature_extractor: wide_resnet101_2 #wide_resnet101_2  # wide_resnet50_2 #resnet50
