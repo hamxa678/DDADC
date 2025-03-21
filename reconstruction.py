@@ -20,10 +20,7 @@ class Reconstruction:
         self.unet = unet
         self.config = config
 
-    def generate_simplex_noise(
-        Simplex_instance, x, t, random_param=False, octave=6, persistence=0.8, frequency=64,
-        in_channels=1
-        ):
+    def generate_simplex_noise(self, Simplex_instance, x, t, random_param=False, octave=6, persistence=0.8, frequency=64,in_channels=1):
             noise = torch.empty(x.shape).to(x.device)
             # noise.shape :: noise shape:: torch.Size([1, 1200, 1600])
             for i in range(in_channels):
@@ -105,7 +102,7 @@ class Reconstruction:
         test_trajectoy_steps = torch.Tensor([self.config.model.test_trajectoy_steps]).type(torch.int64).to(self.config.model.device).long()
         at = _compute_alpha(test_trajectoy_steps)
         # noise = torch.randn_like(x).to(self.config.model.device)
-        e = self.generate_simplex_noise(simplex_instance, x, test_trajectoy_steps).float()
+        e = self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=test_trajectoy_steps).float()
         xt = at.sqrt() * x + (1- at).sqrt() * e
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
