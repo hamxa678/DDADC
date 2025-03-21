@@ -85,7 +85,7 @@ class Reconstruction:
                                 )
                                 ).to(x.device)
                 # print(f'noise shape level two :: {noise.shape}')
-            # print(f"Ulambaaaa :: {noise.shape}")    
+            print(f"Ulambaaaa :: {noise.shape}")    
             return noise
 
     
@@ -126,7 +126,7 @@ class Reconstruction:
                 )
                 c2 = ((1 - at_next) - c1 ** 2).sqrt()
                 # xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et_hat
-                xt_next = at_next.sqrt() * x0_t + c1 * self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=t.long()).float() + c2 * et_hat
+                xt_next = at_next.sqrt() * x0_t + c1 * self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=next_t.long()).float() + c2 * et_hat
 
                 xs.append(xt_next)
         return xs
