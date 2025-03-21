@@ -58,8 +58,8 @@ class DDAD:
                 input = input.to(self.config.model.device)
                 x_0 = self.reconstruction(input, input, self.config.model.w)
                 x0 = x_0[-1]
-                self.save_image(x0[0], '/content/DDADC/recons/image1.png'),
-                self.save_image(x_0[-5][0], '/content/DDADC/recons/image5.png'),
+                self.save_image(x0[0], '/content/DDADC/recons/Fully_denoised.png'),
+                self.save_image(x_0[-5][0], '/content/DDADC/recons/Partially_demoised.png'),
                 anomaly_map = heat_map(x0, input, feature_extractor, self.config)
 
                 anomaly_map = self.transform(anomaly_map)

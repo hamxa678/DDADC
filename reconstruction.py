@@ -6,6 +6,7 @@ import os
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2"
 from simplex import Simplex_CLASS
 from PIL import Image
+import torchvision.transforms as transforms
 
 
 class Reconstruction:
@@ -88,8 +89,15 @@ class Reconstruction:
                 # print(f'noise shape level two :: {noise.shape}')
             print(f"Ulambaaaa :: {noise.shape}")    
             return noise
-
     
+    def save_image(self, tensor, path):
+            print("Image saved")
+            # Normalize the tensor to [0, 1]
+            tensor = (tensor - tensor.min()) / (tensor.max() - tensor.min())
+            # Convert to PIL image
+            image = transforms.ToPILImage()(tensor.cpu().squeeze(0))
+            # Save image
+            image.save(path)
     
     def __call__(self, x, y0, w) -> Any:
         def _compute_alpha(t):
@@ -105,7 +113,7 @@ class Reconstruction:
         # noise = torch.randn_like(x).to(self.config.model.device)
         e = self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=test_trajectoy_steps).float()
         xt = at.sqrt() * x + (1- at).sqrt() * e
-        import torchvision.transforms as transforms
+        
 
         # Convert tensor to PIL image and save
         def save_image(tensor, path):
@@ -118,8 +126,8 @@ class Reconstruction:
             image.save(path)
 
         # Save the image
-        save_image(xt[0], '/content/DDADC/noise/image.png')
-        save_image(xt[1], '/content/DDADC/noise/image1.png')
+        save_image(x[0], '/content/DDADC/noise/original_image.png')
+        save_image(xt[0], '/content/DDADC/noise/fully_noised.png')
 
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
