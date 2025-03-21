@@ -4,6 +4,8 @@ import torch
 import numpy as np
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2"
+from simplex import Simplex_CLASS
+
 
 class Reconstruction:
     '''
@@ -18,6 +20,77 @@ class Reconstruction:
         self.unet = unet
         self.config = config
 
+    def generate_simplex_noise(
+        Simplex_instance, x, t, random_param=False, octave=6, persistence=0.8, frequency=64,
+        in_channels=1
+        ):
+            noise = torch.empty(x.shape).to(x.device)
+            # noise.shape :: noise shape:: torch.Size([1, 1200, 1600])
+            for i in range(in_channels):
+                Simplex_instance.newSeed()
+                if random_param:
+                    param = random.choice(
+                            [(2, 0.6, 16), (6, 0.6, 32), (7, 0.7, 32), (10, 0.8, 64), (5, 0.8, 16), (4, 0.6, 16), (1, 0.6, 64),
+                            (7, 0.8, 128), (6, 0.9, 64), (2, 0.85, 128), (2, 0.85, 64), (2, 0.85, 32), (2, 0.85, 16),
+                            (2, 0.85, 8),
+                            (2, 0.85, 4), (2, 0.85, 2), (1, 0.85, 128), (1, 0.85, 64), (1, 0.85, 32), (1, 0.85, 16),
+                            (1, 0.85, 8),
+                            (1, 0.85, 4), (1, 0.85, 2), ]
+                            )
+                    # 2D octaves seem to introduce directional artifacts in the top left
+                    noise[:, i, ...] = torch.unsqueeze(
+                            torch.from_numpy(
+                                    # Simplex_instance.rand_2d_octaves(
+                                    #         x.shape[-2:], param[0], param[1],
+                                    #         param[2]
+                                    #         )
+                                    Simplex_instance.rand_3d_fixed_T_octaves(
+                                            x.shape[-2:], t.detach().cpu().numpy(), param[0], param[1],
+                                            param[2]
+                                            )
+                                    ).to(x.device), 0
+                            ).repeat(x.shape[0], 1, 1, 1)
+                
+                # lst = torch.from_numpy(
+                #     Simplex_instance.rand_3d_fixed_T_octaves(
+                #         x.shape[-2:], t.detach().cpu().numpy(), octave, persistence, frequency
+                #     )).to(x.device).squeeze(0).shape
+                # print(lst)
+                # noise = torch.unsqueeze(noise,0)
+                # print(f'noise shape level one :: {noise.shape}')
+                # print(f'unsqueezed noise :: {noise.shape}')
+                # print(Simplex_instance.rand_3d_fixed_T_octaves(x.shape[-2:], t.detach().cpu().numpy(), octave,persistence, frequency).shape)
+
+
+                #unchanged
+                # noise = torch.unsqueeze(
+                #     # Simplex3d :: torch.Size([1, 1200, 1600])
+                #         torch.from_numpy(
+                #                 # Simplex_instance.rand_2d_octaves(
+                #                 #         x.shape[-2:], octave,
+                #                 #         persistence, frequency
+                #                 #         )
+                #                 Simplex_instance.rand_3d_fixed_T_octaves(
+                #                         x.shape[-2:], t.detach().cpu().numpy(), octave,
+                #                         persistence, frequency
+                #                         )
+                #                 ).to(x.device), 0
+                #         ).repeat(x.shape[0], 1, 1, 1)
+                
+                noise = torch.from_numpy(
+                        # Simplex_instance.rand_2d_octaves(
+                        #         x.shape[-2:], octave,
+                        #         persistence, frequency
+                        #         )
+                        Simplex_instance.rand_3d_fixed_T_octaves(
+                                x.shape[-2:], t.detach().cpu().numpy(), octave,
+                                persistence, frequency
+                                )
+                                ).to(x.device)
+                # print(f'noise shape level two :: {noise.shape}')
+            # print(f"Ulambaaaa :: {noise.shape}")    
+            return noise
+
     
     
     def __call__(self, x, y0, w) -> Any:
@@ -28,10 +101,13 @@ class Reconstruction:
             beta = beta.to(self.config.model.device)
             a = (1 - beta).cumprod(dim=0).index_select(0, t + 1).view(-1, 1, 1, 1)
             return a
-        
+        simplex_instance = Simplex_CLASS()
         test_trajectoy_steps = torch.Tensor([self.config.model.test_trajectoy_steps]).type(torch.int64).to(self.config.model.device).long()
         at = _compute_alpha(test_trajectoy_steps)
-        xt = at.sqrt() * x + (1- at).sqrt() * torch.randn_like(x).to(self.config.model.device)
+        # noise = torch.randn_like(x).to(self.config.model.device)
+        noise = self.generate_simplex_noise(simplex_instance, x, test_trajectoy_steps, random_param=False
+        ).float()
+        xt = at.sqrt() * x + (1- at).sqrt() * noise
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
 
