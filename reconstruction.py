@@ -106,7 +106,6 @@ class Reconstruction:
         xt = at.sqrt() * x + (1- at).sqrt() * e
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
-
         with torch.no_grad():
             n = x.size(0)
             seq_next = [-1] + list(seq[:-1])
@@ -126,7 +125,9 @@ class Reconstruction:
                     self.config.model.eta * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
                 )
                 c2 = ((1 - at_next) - c1 ** 2).sqrt()
-                xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et_hat
+                # xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et_hat
+                xt_next = at_next.sqrt() * x0_t + c1 * self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=i).float() + c2 * et_hat
+
                 xs.append(xt_next)
         return xs
 
