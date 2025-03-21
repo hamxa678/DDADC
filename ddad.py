@@ -31,6 +31,15 @@ class DDAD:
         self.transform = transforms.Compose([
                             transforms.CenterCrop((224)), 
                         ])
+        
+    def save_image(self, tensor, path):
+        print("Image saved")
+        # Normalize the tensor to [0, 1]
+        tensor = (tensor - tensor.min()) / (tensor.max() - tensor.min())
+        # Convert to PIL image
+        image = transforms.ToPILImage()(tensor.cpu().squeeze(0))
+        # Save image
+        image.save(path)
 
     def __call__(self) -> Any:
         feature_extractor = domain_adaptation(self.unet, self.config, fine_tune=False)
@@ -43,12 +52,12 @@ class DDAD:
         reconstructed_list = []
         forward_list = []
 
-
-
         with torch.no_grad():
             for input, gt, labels in self.testloader:
+
                 input = input.to(self.config.model.device)
                 x0 = self.reconstruction(input, input, self.config.model.w)[-1]
+                self.save_image(x0[0], '/content/DDADC/recons/image.png'),
                 anomaly_map = heat_map(x0, input, feature_extractor, self.config)
 
                 anomaly_map = self.transform(anomaly_map)
