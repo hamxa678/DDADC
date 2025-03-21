@@ -105,7 +105,7 @@ class Reconstruction:
         test_trajectoy_steps = torch.Tensor([self.config.model.test_trajectoy_steps]).type(torch.int64).to(self.config.model.device).long()
         at = _compute_alpha(test_trajectoy_steps)
         # noise = torch.randn_like(x).to(self.config.model.device)
-        noise = self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=test_trajectoy_steps).float()
+        noise = self.generate_simplex_noise(simplex_instance, x, test_trajectoy_steps).float()
         xt = at.sqrt() * x + (1- at).sqrt() * noise
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
