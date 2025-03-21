@@ -118,7 +118,7 @@ class Reconstruction:
             image.save(path)
 
         # Save the image
-        save_image(xt, '/content/DDADC/noise/image.png')
+        save_image(xt[0], '/content/DDADC/noise/image.png')
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
         with torch.no_grad():
