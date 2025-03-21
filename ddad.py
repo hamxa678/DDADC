@@ -56,7 +56,7 @@ class DDAD:
             for input, gt, labels in self.testloader:
 
                 input = input.to(self.config.model.device)
-                x0 = self.reconstruction(input, input, self.config.model.w)[-1]
+                x0 = self.reconstruction(input, input, self.config.model.w)[-5]
                 self.save_image(x0[0], '/content/DDADC/recons/image.png'),
                 anomaly_map = heat_map(x0, input, feature_extractor, self.config)
 
