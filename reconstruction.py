@@ -5,6 +5,7 @@ import numpy as np
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2"
 from simplex import Simplex_CLASS
+from PIL import Image
 
 
 class Reconstruction:
@@ -104,6 +105,20 @@ class Reconstruction:
         # noise = torch.randn_like(x).to(self.config.model.device)
         e = self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=test_trajectoy_steps).float()
         xt = at.sqrt() * x + (1- at).sqrt() * e
+        import torchvision.transforms as transforms
+
+        # Convert tensor to PIL image and save
+        def save_image(tensor, path):
+            print("Image saved")
+            # Normalize the tensor to [0, 1]
+            tensor = (tensor - tensor.min()) / (tensor.max() - tensor.min())
+            # Convert to PIL image
+            image = transforms.ToPILImage()(tensor.cpu().squeeze(0))
+            # Save image
+            image.save(path)
+
+        # Save the image
+        save_image(xt, '/content/DDADC/noise/image.png')
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
         with torch.no_grad():
