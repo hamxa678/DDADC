@@ -126,8 +126,8 @@ class Reconstruction:
             image.save(path)
 
         # Save the image
-        save_image(x[0], '/content/DDADC/noise/original_image.png')
-        save_image(xt[0], '/content/DDADC/noise/fully_noised.png')
+        # save_image(x[0], '/content/DDADC/noise/original_image.png')
+        # save_image(xt[0], '/content/DDADC/noise/fully_noised.png')
 
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
 
