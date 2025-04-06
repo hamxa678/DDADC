@@ -90,46 +90,47 @@ def domain_adaptation(unet, config, fine_tune):
                 x0 = reconstruction(input, target, config.model.w_DA)[-1].to(config.model.device)
                 print(f"Generated Image Shape: {x0.shape}")
                 print(f"======================")
-                # Display and save the images
-                import matplotlib.pyplot as plt
+                # # Display and save the images
+                # import matplotlib.pyplot as plt
 
-                # Convert tensors to CPU and detach them for visualization
-                input_img = input[0].cpu().detach().permute(1, 2, 0).numpy()
-                target_img = target[0].cpu().detach().permute(1, 2, 0).numpy()
-                x0_img = x0[0].cpu().detach().permute(1, 2, 0).numpy()
+                # # Convert tensors to CPU and detach them for visualization
+                # input_img = input[0].cpu().detach().permute(1, 2, 0).numpy()
+                # target_img = target[0].cpu().detach().permute(1, 2, 0).numpy()
+                # x0_img = x0[0].cpu().detach().permute(1, 2, 0).numpy()
 
-                # Normalize the images to [0, 1] for proper visualization
-                input_img = (input_img - input_img.min()) / (input_img.max() - input_img.min())
-                target_img = (target_img - target_img.min()) / (target_img.max() - target_img.min())
-                x0_img = (x0_img - x0_img.min()) / (x0_img.max() - x0_img.min())
+                # # Normalize the images to [0, 1] for proper visualization
+                # input_img = (input_img - input_img.min()) / (input_img.max() - input_img.min())
+                # target_img = (target_img - target_img.min()) / (target_img.max() - target_img.min())
+                # x0_img = (x0_img - x0_img.min()) / (x0_img.max() - x0_img.min())
                 
-                # print the shape of the images
-                print(f"Input Image Shape: {input_img.shape}")
-                print(f"Target Image Shape: {target_img.shape}")
-                print(f"Generated Image Shape: {x0_img.shape}")
-                return
-                # Plot the images
-                fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-                axes[0].imshow(input_img)
-                axes[0].set_title("Input Image")
-                axes[0].axis("off")
 
-                axes[1].imshow(target_img)
-                axes[1].set_title("Target Image")
-                axes[1].axis("off")
+                
+                # # Plot the images
+                # fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+                # axes[0].imshow(input_img)
+                # axes[0].set_title("Input Image")
+                # axes[0].axis("off")
 
-                axes[2].imshow(x0_img)
-                axes[2].set_title("Generated Image (x0)")
-                axes[2].axis("off")
+                # axes[1].imshow(target_img)
+                # axes[1].set_title("Target Image")
+                # axes[1].axis("off")
 
-                # Save the figure
-                save_path = "/content/DDADC/test-image"
-                os.makedirs(save_path, exist_ok=True)
-                plt.savefig(os.path.join(save_path, f"epoch_{epoch+1}_step_{step+1}.png"))
-                plt.close(fig)
+                # axes[2].imshow(x0_img)
+                # axes[2].set_title("Generated Image (x0)")
+                # axes[2].axis("off")
+
+                # # Save the figure
+                # save_path = "/content/DDADC/test-image"
+                # os.makedirs(save_path, exist_ok=True)
+                # plt.savefig(os.path.join(save_path, f"epoch_{epoch+1}_step_{step+1}.png"))
+                # plt.close(fig)
 
                 x0 = x0.repeat(1, 3, 1, 1)
                 target = target.repeat(1, 3, 1, 1)
+
+                print(f"Target Image Shape: {target_img.shape}")
+                print(f"Generated Image Shape: {x0_img.shape}")
+                return
 
                 x0 = transform(x0)
                 target = transform(target)
