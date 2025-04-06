@@ -261,7 +261,11 @@ def _resnet(
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch],
                                               progress=progress)
-        print(state_dict.keys())
+        first_key = list(state_dict.keys())[0]
+        first_layer = state_dict[first_key]
+
+        print(f"First layer name: {first_key}")
+        print(f"First layer tensor shape: {first_layer.shape}")
         old_conv = state_dict.conv1
         state_dict.conv1 = nn.Conv2d(
             in_channels=1,
