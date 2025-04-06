@@ -68,6 +68,39 @@ class DDAD:
                 forward_list.append(input)
                 anomaly_map_list.append(anomaly_map)
 
+                # Display and save all images together
+                import matplotlib.pyplot as plt
+
+                # Convert tensors to PIL images
+                input_image = transforms.ToPILImage()(input[0].cpu())
+                x0_image = transforms.ToPILImage()(x0[0].cpu())
+                gt_image = transforms.ToPILImage()(gt[0].cpu())
+                anomaly_map_image = transforms.ToPILImage()(anomaly_map[0].cpu())
+
+                # Create a figure to display the images
+                fig, axes = plt.subplots(1, 4, figsize=(20, 5))
+                axes[0].imshow(input_image)
+                axes[0].set_title("Input")
+                axes[0].axis("off")
+
+                axes[1].imshow(x0_image)
+                axes[1].set_title("Reconstructed (x_0)")
+                axes[1].axis("off")
+
+                axes[2].imshow(gt_image)
+                axes[2].set_title("Ground Truth (GT)")
+                axes[2].axis("off")
+
+                axes[3].imshow(anomaly_map_image, cmap="hot")
+                axes[3].set_title("Anomaly Map")
+                axes[3].axis("off")
+
+                # Save the figure
+                save_path = "/content/DDADC/test-image"
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
+                plt.savefig(f"{save_path}/comparison.png")
+                plt.close(fig)
 
                 gt_list.append(gt)
                 reconstructed_list.append(x0)
