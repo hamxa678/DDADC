@@ -84,9 +84,12 @@ def domain_adaptation(unet, config, fine_tune):
                 target = batch[0][:half_batch_size].to(config.model.device)  
                 input = batch[0][half_batch_size:].to(config.model.device) 
 
+                print(f"Input Image Shape: {input.shape}")
+                print(f"Target Image Shape: {target.shape}")
                 
                 x0 = reconstruction(input, target, config.model.w_DA)[-1].to(config.model.device)
-                
+                print(f"Generated Image Shape: {x0_img.shape}")
+                print(f"======================")
                 # Display and save the images
                 import matplotlib.pyplot as plt
 
