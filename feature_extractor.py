@@ -107,6 +107,7 @@ def domain_adaptation(unet, config, fine_tune):
                 print(f"Input Image Shape: {input_img.shape}")
                 print(f"Target Image Shape: {target_img.shape}")
                 print(f"Generated Image Shape: {x0_img.shape}")
+                return
                 # Plot the images
                 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
                 axes[0].imshow(input_img)
