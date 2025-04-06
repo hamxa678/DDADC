@@ -173,7 +173,7 @@ class ResNet(nn.Module):
                              "or a 3-element tuple, got {}".format(replace_stride_with_dilation))
         self.groups = groups
         self.base_width = width_per_group
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3,
+        self.conv1 = nn.Conv2d(1, self.inplanes, kernel_size=7, stride=2, padding=3,
                                bias=False)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
@@ -261,6 +261,15 @@ def _resnet(
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch],
                                               progress=progress)
+        old_conv = state_dict.conv1
+        state_dict.conv1 = nn.Conv2d(
+            in_channels=1,
+            out_channels=old_conv.out_channels,
+            kernel_size=old_conv.kernel_size,
+            stride=old_conv.stride,
+            padding=old_conv.padding,
+            bias=old_conv.bias is not None
+)
         #for k,v in list(state_dict.items()):
         #    if 'layer4' in k or 'fc' in k:
         #        state_dict.pop(k)
