@@ -53,6 +53,7 @@ class DDAD:
         forward_list = []
 
         with torch.no_grad():
+            i = 1
             for input, gt, labels in self.testloader:
 
                 input = input.to(self.config.model.device)
@@ -99,9 +100,9 @@ class DDAD:
                 save_path = "/content/DDADC/test-image"
                 if not os.path.exists(save_path):
                     os.makedirs(save_path)
-                plt.savefig(f"{save_path}/comparison.png")
+                plt.savefig(f"{save_path}/comparison{i}.png")
                 plt.close(fig)
-
+                i += 1
                 gt_list.append(gt)
                 reconstructed_list.append(x0)
                 for pred, label in zip(anomaly_map, labels):
