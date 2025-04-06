@@ -261,6 +261,7 @@ def _resnet(
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch],
                                               progress=progress)
+        print(state_dict.keys())
         old_conv = state_dict.conv1
         state_dict.conv1 = nn.Conv2d(
             in_channels=1,
