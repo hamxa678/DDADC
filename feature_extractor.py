@@ -99,7 +99,11 @@ def domain_adaptation(unet, config, fine_tune):
                 input_img = (input_img - input_img.min()) / (input_img.max() - input_img.min())
                 target_img = (target_img - target_img.min()) / (target_img.max() - target_img.min())
                 x0_img = (x0_img - x0_img.min()) / (x0_img.max() - x0_img.min())
-
+                
+                # print the shape of the images
+                print(f"Input Image Shape: {input_img.shape}")
+                print(f"Target Image Shape: {target_img.shape}")
+                print(f"Generated Image Shape: {x0_img.shape}")
                 # Plot the images
                 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
                 axes[0].imshow(input_img)
@@ -137,6 +141,7 @@ def domain_adaptation(unet, config, fine_tune):
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
+
 
             print(f"Epoch {epoch+1} | Loss: {loss.item()}")
             if (epoch+1) % 4 == 0:
