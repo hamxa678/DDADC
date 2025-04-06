@@ -128,8 +128,8 @@ def domain_adaptation(unet, config, fine_tune):
                 x0 = x0.repeat(1, 3, 1, 1)
                 target = target.repeat(1, 3, 1, 1)
 
-                print(f"Target Image Shape: {target_img.shape}")
-                print(f"Generated Image Shape: {x0_img.shape}")
+                print(f"Target Image Shape: {target.shape}")
+                print(f"Generated Image Shape: {x0.shape}")
                 return
 
                 x0 = transform(x0)
