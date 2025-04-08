@@ -31,7 +31,7 @@ model:
   DLlambda : 0.1 # 0.1 for MVTec and 0.01 for VisA
   trajectory_steps: 1000
   test_trajectoy_steps: 500   # Starting point for denoining trajectory.
-  test_trajectoy_steps_DA: 600  # Starting point for denoining trajectory for domain adaptation.
+  test_trajectoy_steps_DA: 650  # Starting point for denoining trajectory for domain adaptation.
   skip : 25   # Number of steps to skip for denoising trajectory.
   skip_DA : 25
   eta : 1 # Stochasticity parameter for denoising process.
