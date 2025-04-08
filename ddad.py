@@ -33,7 +33,7 @@ class DDAD:
                         ])
         
     def save_image(self, tensor, path):
-        print("Image saved")
+        # print("Image saved")
         # Normalize the tensor to [0, 1]
         tensor = (tensor - tensor.min()) / (tensor.max() - tensor.min())
         # Convert to PIL image
@@ -59,6 +59,28 @@ class DDAD:
                 input = input.to(self.config.model.device)
                 x_0 = self.reconstruction(input, input, self.config.model.w)
                 x0 = x_0[-1]
+
+                # Convert tensors to PIL images in grayscale
+                input_image_gray = transforms.ToPILImage()(input[0].cpu()).convert("L")
+                x0_image_gray = transforms.ToPILImage()(x0[0].cpu()).convert("L")
+
+                # Create a figure to display the grayscale images
+                fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+                axes[0].imshow(input_image_gray, cmap="gray")
+                axes[0].set_title("Input (Grayscale)")
+                axes[0].axis("off")
+
+                axes[1].imshow(x0_image_gray, cmap="gray")
+                axes[1].set_title("Reconstructed (x_0) (Grayscale)")
+                axes[1].axis("off")
+
+                # Save the figure
+                save_path = "/content/DDADC/test_images"
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
+                plt.savefig(f"{save_path}/grayscale_comparison{i}.png")
+                plt.close(fig)
+                
                 # self.save_image(x0[0], '/content/DDADC/recons/Fully_denoised.png'),
                 # self.save_image(x_0[-5][0], '/content/DDADC/recons/Partially_demoised.png'),
                 anomaly_map = heat_map(x0, input, feature_extractor, self.config)
