@@ -34,7 +34,7 @@ class Dataset_maker(torch.utils.data.Dataset):
         )
         if is_train:
             self.image_files = glob(
-                os.path.join(root,"Clean data", "train", "*.jpg")
+                os.path.join(root,"Clean data", "Train", "*.jpg")
             )
         else:
             self.image_files = glob(os.path.join(root, "Anomolous data","*.jpg"))
