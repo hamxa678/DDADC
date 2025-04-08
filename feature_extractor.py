@@ -92,43 +92,9 @@ def domain_adaptation(unet, config, fine_tune):
                 # print(f"======================")
                 # Display and save the images
 
-                import matplotlib.pyplot as plt
+                
 
-                # Convert grayscale images to numpy arrays for visualization
-                input_np = input.cpu().numpy().squeeze(1)
-                target_np = target.cpu().numpy().squeeze(1)
-                x0_np = x0.cpu().numpy().squeeze(1)
 
-                # Display the images side by side
-                fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-                axes[0].imshow(input_np[0], cmap='gray')
-                axes[0].set_title("Input")
-                axes[0].axis('off')
-
-                axes[1].imshow(target_np[0], cmap='gray')
-                axes[1].set_title("Target")
-                axes[1].axis('off')
-
-                axes[2].imshow(x0_np[0], cmap='gray')
-                axes[2].set_title("Generated (x0)")
-                axes[2].axis('off')
-
-                plt.tight_layout()
-                plt.show()
-
-                # Save the images to the specified directory
-                save_dir = "/content/DDADC/test_images"
-                os.makedirs(save_dir, exist_ok=True)
-
-                input_save_path = os.path.join(save_dir, "input.png")
-                target_save_path = os.path.join(save_dir, "target.png")
-                x0_save_path = os.path.join(save_dir, "x0.png")
-
-                plt.imsave(input_save_path, input_np[0], cmap='gray')
-                plt.imsave(target_save_path, target_np[0], cmap='gray')
-                plt.imsave(x0_save_path, x0_np[0], cmap='gray')
-
-                return
                 x0 = x0.repeat(1, 3, 1, 1)
                 target = target.repeat(1, 3, 1, 1)
 

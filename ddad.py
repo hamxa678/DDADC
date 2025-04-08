@@ -69,6 +69,8 @@ class DDAD:
                 forward_list.append(input)
                 anomaly_map_list.append(anomaly_map)
 
+                # TODO: printing the image as a gray scale.
+
                 # Display and save all images together
                 import matplotlib.pyplot as plt
 
