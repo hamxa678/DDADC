@@ -91,40 +91,44 @@ def domain_adaptation(unet, config, fine_tune):
                 # print(f"Generated Image Shape: {x0.shape}")
                 # print(f"======================")
                 # Display and save the images
+
                 import matplotlib.pyplot as plt
 
-                # Convert tensors to CPU and detach them for visualization
-                input_img = input[0].cpu().detach().permute(1, 2, 0).numpy()
-                target_img = target[0].cpu().detach().permute(1, 2, 0).numpy()
-                x0_img = x0[0].cpu().detach().permute(1, 2, 0).numpy()
+                # Convert grayscale images to numpy arrays for visualization
+                input_np = input.cpu().numpy().squeeze(1)
+                target_np = target.cpu().numpy().squeeze(1)
+                x0_np = x0.cpu().numpy().squeeze(1)
 
-                # Normalize the images to [0, 1] for proper visualization
-                input_img = (input_img - input_img.min()) / (input_img.max() - input_img.min())
-                target_img = (target_img - target_img.min()) / (target_img.max() - target_img.min())
-                x0_img = (x0_img - x0_img.min()) / (x0_img.max() - x0_img.min())
-                
-
-                
-                # Plot the images
+                # Display the images side by side
                 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-                axes[0].imshow(input_img)
-                axes[0].set_title("Input Image")
-                axes[0].axis("off")
+                axes[0].imshow(input_np[0], cmap='gray')
+                axes[0].set_title("Input")
+                axes[0].axis('off')
 
-                axes[1].imshow(target_img)
-                axes[1].set_title("Target Image")
-                axes[1].axis("off")
+                axes[1].imshow(target_np[0], cmap='gray')
+                axes[1].set_title("Target")
+                axes[1].axis('off')
 
-                axes[2].imshow(x0_img)
-                axes[2].set_title("Generated Image (x0)")
-                axes[2].axis("off")
+                axes[2].imshow(x0_np[0], cmap='gray')
+                axes[2].set_title("Generated (x0)")
+                axes[2].axis('off')
 
-                # Save the figure
-                save_path = "/content/DDADC/test-image"
-                os.makedirs(save_path, exist_ok=True)
-                plt.savefig(os.path.join(save_path, f"epoch_{epoch+1}_step_{step+1}.png"))
-                plt.close(fig)
+                plt.tight_layout()
+                plt.show()
 
+                # Save the images to the specified directory
+                save_dir = "/content/DDADC/test_images"
+                os.makedirs(save_dir, exist_ok=True)
+
+                input_save_path = os.path.join(save_dir, "input.png")
+                target_save_path = os.path.join(save_dir, "target.png")
+                x0_save_path = os.path.join(save_dir, "x0.png")
+
+                plt.imsave(input_save_path, input_np[0], cmap='gray')
+                plt.imsave(target_save_path, target_np[0], cmap='gray')
+                plt.imsave(x0_save_path, x0_np[0], cmap='gray')
+
+                return
                 x0 = x0.repeat(1, 3, 1, 1)
                 target = target.repeat(1, 3, 1, 1)
 
