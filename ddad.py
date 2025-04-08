@@ -63,7 +63,7 @@ class DDAD:
                 # Convert tensors to PIL images in grayscale
                 input_image_gray = transforms.ToPILImage()(input[0].cpu()).convert("L")
                 x0_image_gray = transforms.ToPILImage()(x0[0].cpu()).convert("L")
-
+                import matplotlib.pyplot as plt
                 # Create a figure to display the grayscale images
                 fig, axes = plt.subplots(1, 2, figsize=(10, 5))
                 axes[0].imshow(input_image_gray, cmap="gray")
@@ -80,7 +80,7 @@ class DDAD:
                     os.makedirs(save_path)
                 plt.savefig(f"{save_path}/grayscale_comparison{i}.png")
                 plt.close(fig)
-                
+
                 # self.save_image(x0[0], '/content/DDADC/recons/Fully_denoised.png'),
                 # self.save_image(x_0[-5][0], '/content/DDADC/recons/Partially_demoised.png'),
                 anomaly_map = heat_map(x0, input, feature_extractor, self.config)
