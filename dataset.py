@@ -24,7 +24,7 @@ class Dataset_maker(torch.utils.data.Dataset):
                 transforms.Lambda(lambda t: (t * 2) - 1) # Scale between [-1, 1] 
             ]
         )
-        self.config = config
+
         self.mask_transform = transforms.Compose(
             [
                 transforms.Grayscale(num_output_channels=1),
@@ -32,13 +32,20 @@ class Dataset_maker(torch.utils.data.Dataset):
                 transforms.ToTensor(), # Scales data into [0,1] 
             ]
         )
+        self.config = config
+        self.is_train = is_train
         if is_train:
             self.image_files = glob(
                 os.path.join(root,"Clean data", "Train", "*.jpg")
             )
         else:
-            self.image_files = glob(os.path.join(root, "Anomolous data","*.jpg"))
-        self.is_train = is_train
+            self.image_files = []
+            test_images = glob(os.path.join(root, "Clean data", "Test", "*.jpg"))
+            anom_images = glob(os.path.join(root, "Anomlous_Data", "*.jpg"))
+
+            self.image_files.extend(test_images)
+            self.image_files.extend(anom_images)
+        
 
     def __getitem__(self, index):
         image_file = self.image_files[index]
@@ -52,24 +59,38 @@ class Dataset_maker(torch.utils.data.Dataset):
             label = 'good'
             return image, label
         else:
-            if self.config.data.mask:
-                if self.config.data.name == 'Bosch':
-                        mask_file = image_file.replace(
-                            ".jpg", ".png"
-                        )
-                        
-                        target = Image.open(
-                            mask_file
-                        )
-                        target = self.mask_transform(target)
-                label = 'defective'
+            image_dir = os.path.dirname(image_file)
+            filename = os.path.basename(image_file)
+            if "Anomolous data" in image_dir:
+                label = "defective"
+                if self.config.data.mask:
+                    # Replace .jpg with .png to find corresponding mask
+                    mask_file = image_file.replace(".jpg", ".png")
+                    if os.path.exists(mask_file):
+                        mask = Image.open(mask_file)
+                        target = self.mask_transform(mask)
             else:
-                if os.path.dirname(image_file).endswith("good"):
-                    target = torch.zeros([1, image.shape[-2], image.shape[-1]])
-                    label = 'good'
-                else :
-                    target = torch.zeros([1, image.shape[-2], image.shape[-1]])
-                    label = 'defective'
+                label = "good"
+                target = torch.zeros([1, image.shape[-2], image.shape[-1]])
+            # 
+            # if self.config.data.mask:
+            #     if self.config.data.name == 'Bosch':
+            #             mask_file = image_file.replace(
+            #                 ".jpg", ".png"
+            #             )
+                        
+            #             target = Image.open(
+            #                 mask_file
+            #             )
+            #             target = self.mask_transform(target)
+            #     label = 'defective'
+            # else:
+            #     if os.path.dirname(image_file).endswith("good"):
+            #         target = torch.zeros([1, image.shape[-2], image.shape[-1]])
+            #         label = 'good'
+            #     else :
+            #         target = torch.zeros([1, image.shape[-2], image.shape[-1]])
+            #         label = 'defective'
             
             return image, target, label
 
