@@ -129,6 +129,7 @@ class DDAD:
                 i += 1
                 gt_list.append(gt)
                 reconstructed_list.append(x0)
+                print('labels :: ', labels)
                 for pred, label in zip(anomaly_map, labels):
                     labels_list.append(0 if label == 'good' else 1)
                     predictions.append(torch.max(pred).item())
