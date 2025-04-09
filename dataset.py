@@ -40,8 +40,8 @@ class Dataset_maker(torch.utils.data.Dataset):
             )
         else:
             self.image_files = []
-            test_images = glob(os.path.join(root, "Clean data", "Test", "*.jpg"))
-            anom_images = glob(os.path.join(root, "Anomlous_Data", "*.jpg"))
+            test_images = glob(os.path.join(root, "Clean data", "Test", "*.jpg"))[:50]
+            anom_images = glob(os.path.join(root, "Anomolous data", "*.jpg"))
 
             self.image_files.extend(test_images)
             self.image_files.extend(anom_images)
@@ -60,10 +60,6 @@ class Dataset_maker(torch.utils.data.Dataset):
             return image, label
         else:
             image_dir = os.path.dirname(image_file)
-            filename = os.path.basename(image_file)
-            print("Image file name: ", filename)
-            print("Image directory: ", image_dir)
-            return
             if "Anomolous data" in image_dir:
                 label = "defective"
                 if self.config.data.mask:
