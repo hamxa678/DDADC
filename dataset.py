@@ -61,6 +61,8 @@ class Dataset_maker(torch.utils.data.Dataset):
         else:
             image_dir = os.path.dirname(image_file)
             filename = os.path.basename(image_file)
+            print("Image file name: ", filename)
+            print("Image directory: ", image_dir)
             if "Anomolous data" in image_dir:
                 label = "defective"
                 if self.config.data.mask:
