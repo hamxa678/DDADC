@@ -54,7 +54,7 @@ model:
 metrics:
   auroc: True
   pro: True
-  misclassifications: False
+  misclassifications: True
   visualisation: True
 
 
