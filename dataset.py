@@ -183,3 +183,6 @@ class Dataset_maker(torch.utils.data.Dataset):
 
 #     def __len__(self):
 #         return len(self.image_files)
+
+
+# AUROC: (96.5,89.3)

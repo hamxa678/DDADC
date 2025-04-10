@@ -134,7 +134,7 @@ class DDAD:
                     labels_list.append(0 if label == 'good' else 1)
                     predictions.append(torch.max(pred).item())
                 
-        print('label: ', len(set(labels_list)))
+        # print('label: ', len(set(labels_list)))
         
         metric = Metric(labels_list, predictions, anomaly_map_list, gt_list, self.config)
         metric.optimal_threshold()
