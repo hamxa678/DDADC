@@ -35,7 +35,7 @@ def heat_map(output, target, FE, config):
         anomaly_map , kernel_size=(kernel_size,kernel_size), sigma=(sigma,sigma)
         )
     anomaly_map = torch.sum(anomaly_map, dim=1).unsqueeze(1)
-    return anomaly_map
+    return anomaly_map, i_d, f_d
 
 
 
@@ -43,7 +43,8 @@ def pixel_distance(output, target):
     '''
     Pixel distance between image1 and image2
     '''
-    distance_map = torch.mean(torch.abs(output - target), dim=1).unsqueeze(1)
+    err = torch.mean(torch.abs(output - target), dim=1).unsqueeze(1)  # Shape: [B, 1, H, W]
+    distance_map = torch.where(err > 0.5, err, torch.zeros_like(err))
     return distance_map
 
 

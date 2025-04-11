@@ -92,7 +92,7 @@ class DDAD:
 
                 x0_f = transform(x0_f)
                 input_f = transform(input_f)
-                anomaly_map = heat_map(x0, input, feature_extractor, self.config)
+                anomaly_map, p_anomaly_map, f_anomaly_map = heat_map(x0, input, feature_extractor, self.config)
 
                 anomaly_map = self.transform(anomaly_map)
                 gt = self.transform(gt)
@@ -101,7 +101,7 @@ class DDAD:
                 anomaly_map_list.append(anomaly_map)
 
                 # TODO: printing the image as a gray scale.
-
+                
                 # Display and save all images together
                 import matplotlib.pyplot as plt
 
@@ -112,7 +112,7 @@ class DDAD:
                 anomaly_map_image = transforms.ToPILImage()(anomaly_map[0].cpu())
 
                 # Create a figure to display the images
-                fig, axes = plt.subplots(1, 4, figsize=(20, 5))
+                fig, axes = plt.subplots(1, 6, figsize=(20, 5))
                 axes[0].imshow(input_image)
                 axes[0].set_title("Input")
                 axes[0].axis("off")
@@ -128,6 +128,14 @@ class DDAD:
                 axes[3].imshow(anomaly_map_image, cmap="hot")
                 axes[3].set_title("Anomaly Map")
                 axes[3].axis("off")
+
+                axes[4].imshow(p_anomaly_map, cmap="hot")
+                axes[4].set_title("pixel-wise")
+                axes[4].axis("off")
+
+                axes[5].imshow(f_anomaly_map, cmap="hot")
+                axes[5].set_title("feature-wise")
+                axes[5].axis("off")
 
                 # Save the figure
                 save_path = "/content/DDADC/test-image"
