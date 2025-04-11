@@ -18,7 +18,7 @@ class Metric:
         self.anomaly_map_list = anomaly_map_list
         self.gt_list = gt_list
         self.config = config
-        self.threshold = 0.5
+        self.threshold = 0.6
     
     def image_auroc(self):
         auroc_image = roc_auc_score(self.labels_list, self.predictions)
