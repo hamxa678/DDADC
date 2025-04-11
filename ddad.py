@@ -87,8 +87,11 @@ class DDAD:
 
                 # self.save_image(x0[0], '/content/DDADC/recons/Fully_denoised.png'),
                 # self.save_image(x_0[-5][0], '/content/DDADC/recons/Partially_demoised.png'),
-                x0 = transform(x0)
-                input = transform(input)
+                x0_f = x0.repeat(1, 3, 1, 1)
+                input_f = input.repeat(1, 3, 1, 1)
+
+                x0_f = transform(x0_f)
+                input_f = transform(input_f)
                 anomaly_map = heat_map(x0, input, feature_extractor, self.config)
 
                 anomaly_map = self.transform(anomaly_map)
