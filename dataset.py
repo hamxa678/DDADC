@@ -21,7 +21,7 @@ class Dataset_maker(torch.utils.data.Dataset):
                 transforms.Grayscale(num_output_channels=1),
                 transforms.Resize((config.data.image_size, config.data.image_size)),  
                 transforms.ToTensor(), # Scales data into [0,1] 
-                # transforms.Lambda(lambda t: (t * 2) - 1) # Scale between [-1, 1] 
+                transforms.Lambda(lambda t: (t * 2) - 1) # Scale between [-1, 1] 
             ]
         )
 

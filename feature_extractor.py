@@ -69,10 +69,10 @@ def domain_adaptation(unet, config, fine_tune):
         feature_extractor.train()
 
 
-        # transform = transforms.Compose([
-        #             transforms.Lambda(lambda t: (t + 1) / (2)),
-        #             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        #         ])
+        transform = transforms.Compose([
+                    transforms.Lambda(lambda t: (t + 1) / (2)),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ])
 
         optimizer = torch.optim.AdamW(feature_extractor.parameters(),lr= 1e-4)
         torch.save(frozen_feature_extractor.state_dict(), os.path.join(os.path.join(os.getcwd(), config.model.checkpoint_dir),f'feat0'))
@@ -102,8 +102,8 @@ def domain_adaptation(unet, config, fine_tune):
                 # print(f"Generated Image Shape: {x0.shape}")
                 # return
 
-                # x0 = transform(x0)
-                # target = transform(target)
+                x0 = transform(x0)
+                target = transform(target)
 
                 reconst_fe = feature_extractor(x0)
                 target_fe = feature_extractor(target)
