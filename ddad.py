@@ -110,6 +110,8 @@ class DDAD:
                 x0_image = transforms.ToPILImage()(x0[0].cpu())
                 gt_image = transforms.ToPILImage()(gt[0].cpu())
                 anomaly_map_image = transforms.ToPILImage()(anomaly_map[0].cpu())
+                p_anomaly_image = transforms.ToPILImage()(p_anomaly_map[0].cpu())
+                f_anomaly_map_image = transforms.ToPILImage()(f_anomaly_map[0].cpu())
 
                 # Create a figure to display the images
                 fig, axes = plt.subplots(1, 6, figsize=(20, 5))
@@ -129,11 +131,11 @@ class DDAD:
                 axes[3].set_title("Anomaly Map")
                 axes[3].axis("off")
 
-                axes[4].imshow(p_anomaly_map, cmap="hot")
+                axes[4].imshow(p_anomaly_image, cmap="hot")
                 axes[4].set_title("pixel-wise")
                 axes[4].axis("off")
 
-                axes[5].imshow(f_anomaly_map, cmap="hot")
+                axes[5].imshow(f_anomaly_map_image, cmap="hot")
                 axes[5].set_title("feature-wise")
                 axes[5].axis("off")
 
