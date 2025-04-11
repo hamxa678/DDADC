@@ -44,7 +44,7 @@ def pixel_distance(output, target):
     Pixel distance between image1 and image2
     '''
     err = torch.mean(torch.abs(output - target), dim=1).unsqueeze(1)  # Shape: [B, 1, H, W]
-    distance_map = torch.where(err > 0.5, err, torch.zeros_like(err))
+    distance_map = torch.where(err > 0.6, err, torch.zeros_like(err))
     return distance_map
 
 
