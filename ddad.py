@@ -51,6 +51,10 @@ class DDAD:
         gt_list = []
         reconstructed_list = []
         forward_list = []
+        transform = transforms.Compose([
+            # transforms.Lambda(lambda t: (t + 1) / (2)),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
 
         with torch.no_grad():
             i = 1
@@ -83,6 +87,8 @@ class DDAD:
 
                 # self.save_image(x0[0], '/content/DDADC/recons/Fully_denoised.png'),
                 # self.save_image(x_0[-5][0], '/content/DDADC/recons/Partially_demoised.png'),
+                x0 = transform(x0)
+                input = transform(input)
                 anomaly_map = heat_map(x0, input, feature_extractor, self.config)
 
                 anomaly_map = self.transform(anomaly_map)
