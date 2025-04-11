@@ -139,3 +139,4 @@ def show_tensor_mask(image):
     return reverse_transforms(image)
         
 
+# AUROC: (95.6,87.9)
