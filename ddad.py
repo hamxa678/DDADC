@@ -56,9 +56,11 @@ class DDAD:
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
 
+        ls = []
+
         with torch.no_grad():
             i = 1
-            for input, gt, labels in self.testloader:
+            for input, gt, labels, file_name in self.testloader:
 
                 input = input.to(self.config.model.device)
                 x_0 = self.reconstruction(input, input, self.config.model.w)
@@ -148,10 +150,31 @@ class DDAD:
                 i += 1
                 gt_list.append(gt)
                 reconstructed_list.append(x0)
-                print('labels :: ', labels)
+
                 for pred, label in zip(anomaly_map, labels):
                     labels_list.append(0 if label == 'good' else 1)
                     predictions.append(torch.max(pred).item())
+                    dic = {
+                        "file_name": file_name, label:0 if label == 'good' else 1, pred: torch.max(pred).item(), "ano_score": torch.mean(anomaly_map)
+                    }
+                    ls.append(dic)
+
+        import csv
+        import os
+
+        # Ensure the directory exists
+        output_dir = "/content/DDADC/csv_file"
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Define output file path
+        output_file = os.path.join(output_dir, "output.csv")
+
+        # Write to CSV
+        with open(output_file, mode='w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=["file_name", "label", "pred", "ano_score"])
+            writer.writeheader()
+            writer.writerows(ls)
+
                 
         # print('label: ', len(set(labels_list)))
         
