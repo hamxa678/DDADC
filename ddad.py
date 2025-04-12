@@ -157,7 +157,7 @@ class DDAD:
                     labels_list.append(0 if label == 'good' else 1)
                     predictions.append(torch.max(pred).item())
                     dic = {
-                        "file_name": file_name, label:0 if label == 'good' else 1, pred: torch.max(pred).item(), "ano_score": torch.mean(anomaly_map)
+                        "file_name": file_name, "label":0 if label == 'good' else 1, "pred": torch.max(pred).item(), "ano_score": torch.mean(anomaly_map)
                     }
                     ls.append(dic)
 
