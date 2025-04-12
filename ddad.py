@@ -8,6 +8,8 @@ from anomaly_map import *
 from metrics import *
 from feature_extractor import *
 from reconstruction import *
+import csv
+import os
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2"
 
 class DDAD:
@@ -159,8 +161,7 @@ class DDAD:
                     }
                     ls.append(dic)
 
-        import csv
-        import os
+
 
         # Ensure the directory exists
         output_dir = "/content/DDADC/csv_file"
