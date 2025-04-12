@@ -32,7 +32,7 @@ model:
 
 
 
-  w : 0.35 # Conditionig parameter. The higher the value, the more the model is conditioned on the target image. "Fine tuninig this parameter results in better performance".
+  w : 0.1 # Conditionig parameter. The higher the value, the more the model is conditioned on the target image. "Fine tuninig this parameter results in better performance".
   test_trajectoy_steps: 600   # Starting point for denoining trajectory.
 
 
