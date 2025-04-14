@@ -32,7 +32,7 @@ model:
 
 
 
-  w : 0.05 # Conditionig parameter. The higher the value, the more the model is conditioned on the target image. "Fine tuninig this parameter results in better performance".
+  w : 0.02 # Conditionig parameter. The higher the value, the more the model is conditioned on the target image. "Fine tuninig this parameter results in better performance".
   test_trajectoy_steps: 450   # Starting point for denoining trajectory.
 
 
@@ -71,4 +71,5 @@ metrics:
 
 
 
-  # v = 7, w = 0.1, t = 550
+  # v = 7, w = 0.1, t = 550   -> AUROC: (96.2,93.5), PRO: 68.6
+  # v = 7, w = 0.05, t = 550   -> AUROC: (98.9,93.7), PRO: 64.6
