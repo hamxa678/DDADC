@@ -79,3 +79,5 @@ metrics:
 
 
 
+# with training DA.
+  # v = 7, w = 0.04, t = 550   -> AUROC: (95.9,94.0), PRO:  73.4
