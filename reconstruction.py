@@ -107,29 +107,12 @@ class Reconstruction:
             beta = beta.to(self.config.model.device)
             a = (1 - beta).cumprod(dim=0).index_select(0, t + 1).view(-1, 1, 1, 1)
             return a
-        simplex_instance = Simplex_CLASS()
+        # simplex_instance = Simplex_CLASS()
         test_trajectoy_steps = torch.Tensor([self.config.model.test_trajectoy_steps]).type(torch.int64).to(self.config.model.device).long()
         at = _compute_alpha(test_trajectoy_steps)
-        # noise = torch.randn_like(x).to(self.config.model.device)
-        e = self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=test_trajectoy_steps).float()
-        xt = at.sqrt() * x + (1- at).sqrt() * e
-        
-
-        # Convert tensor to PIL image and save
-        def save_image(tensor, path):
-            print("Image saved")
-            # Normalize the tensor to [0, 1]
-            tensor = (tensor - tensor.min()) / (tensor.max() - tensor.min())
-            # Convert to PIL image
-            image = transforms.ToPILImage()(tensor.cpu().squeeze(0))
-            # Save image
-            image.save(path)
-
-        # Save the image
-        # save_image(x[0], '/content/DDADC/noise/original_image.png')
-        # save_image(xt[0], '/content/DDADC/noise/fully_noised.png')
-
+        xt = at.sqrt() * x + (1- at).sqrt() * torch.randn_like(x).to(self.config.model.device)
         seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
+
 
         with torch.no_grad():
             n = x.size(0)
@@ -150,11 +133,57 @@ class Reconstruction:
                     self.config.model.eta * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
                 )
                 c2 = ((1 - at_next) - c1 ** 2).sqrt()
-                # xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et_hat
-                xt_next = at_next.sqrt() * x0_t + c1 * self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=next_t.long()).float() + c2 * et_hat
-
+                xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et_hat
                 xs.append(xt_next)
         return xs
+
+
+
+        # noise = torch.randn_like(x).to(self.config.model.device)
+        # e = self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=test_trajectoy_steps).float()
+        # xt = at.sqrt() * x + (1- at).sqrt() * e
+        
+
+        # Convert tensor to PIL image and save
+        # def save_image(tensor, path):
+        #     print("Image saved")
+        #     # Normalize the tensor to [0, 1]
+        #     tensor = (tensor - tensor.min()) / (tensor.max() - tensor.min())
+        #     # Convert to PIL image
+        #     image = transforms.ToPILImage()(tensor.cpu().squeeze(0))
+        #     # Save image
+        #     image.save(path)
+
+        # Save the image
+        # save_image(x[0], '/content/DDADC/noise/original_image.png')
+        # save_image(xt[0], '/content/DDADC/noise/fully_noised.png')
+
+        # seq = range(0 , self.config.model.test_trajectoy_steps, self.config.model.skip)
+
+        # with torch.no_grad():
+        #     n = x.size(0)
+        #     seq_next = [-1] + list(seq[:-1])
+        #     xs = [xt]
+        #     for index, (i, j) in enumerate(zip(reversed(seq), reversed(seq_next))):
+        #         t = (torch.ones(n) * i).to(self.config.model.device)
+        #         next_t = (torch.ones(n) * j).to(self.config.model.device)
+        #         at = _compute_alpha(t.long())
+        #         at_next = _compute_alpha(next_t.long())
+        #         xt = xs[-1].to(self.config.model.device)
+        #         self.unet = self.unet.to(self.config.model.device)
+        #         et = self.unet(xt, t)
+        #         yt = at.sqrt() * y0 + (1- at).sqrt() *  et
+        #         et_hat = et - (1 - at).sqrt() * w * (yt-xt)
+        #         x0_t = (xt - et_hat * (1 - at).sqrt()) / at.sqrt()
+        #         c1 = (
+        #             self.config.model.eta * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
+        #         )
+        #         c2 = ((1 - at_next) - c1 ** 2).sqrt()
+        #         # xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et_hat
+        #         xt_next = at_next.sqrt() * x0_t + c1 * self.generate_simplex_noise(Simplex_instance=simplex_instance, x=x, t=next_t.long()).float() + c2 * et_hat
+
+        #         xs.append(xt_next)
+        # return xs
 
          
 
