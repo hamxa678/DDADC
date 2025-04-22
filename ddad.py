@@ -156,12 +156,13 @@ class DDAD:
                 for pred, label in zip(anomaly_map, labels):
                     print(f"pred shape :: {pred.shape}")
                     print(f"label : {label}")
-                    labels_list.append(0 if label == 'good' else 1)
-                    predictions.append(torch.max(pred).item())
-                    dic = {
-                        "file_name": file_name, "label":0 if label == 'good' else 1, "pred": torch.max(pred).item(), "ano_score": torch.mean(anomaly_map).cpu().item()
-                    }
-                    ls.append(dic)
+                    if not torch.isnan(torch.max(pred)):
+                        labels_list.append(0 if label == 'good' else 1)
+                        predictions.append(torch.max(pred).item())
+                        dic = {
+                            "file_name": file_name, "label":0 if label == 'good' else 1, "pred": torch.max(pred).item(), "ano_score": torch.mean(anomaly_map).cpu().item()
+                        }
+                        ls.append(dic)
 
 
 
