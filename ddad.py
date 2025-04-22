@@ -154,6 +154,8 @@ class DDAD:
                 reconstructed_list.append(x0)
 
                 for pred, label in zip(anomaly_map, labels):
+                    print(f"pred shape :: {pred.shape}")
+                    print(f"label : {label}")
                     labels_list.append(0 if label == 'good' else 1)
                     predictions.append(torch.max(pred).item())
                     dic = {
