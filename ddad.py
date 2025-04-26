@@ -183,7 +183,8 @@ class DDAD:
         # print('label: ', len(set(labels_list)))
         
         metric = Metric(labels_list, predictions, anomaly_map_list, gt_list, self.config)
-        metric.optimal_threshold()
+        threasold = metric.optimal_threshold()
+        print(f"threasold value :: {threasold}")
         if self.config.metrics.auroc:
             print('AUROC: ({:.1f},{:.1f})'.format(metric.image_auroc() * 100, metric.pixel_auroc() * 100))
         if self.config.metrics.pro:
