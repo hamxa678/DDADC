@@ -41,10 +41,10 @@ class Dataset_maker(torch.utils.data.Dataset):
         else:
             self.image_files = []
             test_images = glob(os.path.join(root, "Clean data", "Test", "*.jpg"))
-            # anom_images = glob(os.path.join(root, "Anomolous data", "*.jpg"))
+            anom_images = glob(os.path.join(root, "Anomolous data", "*.jpg"))[:10]
 
             self.image_files.extend(test_images)
-            # self.image_files.extend(anom_images)
+            self.image_files.extend(anom_images)
         
 
     def __getitem__(self, index):
